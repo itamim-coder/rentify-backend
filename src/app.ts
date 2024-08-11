@@ -2,20 +2,21 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application } from "express";
-// import globalErrorHandler from "./app/middlewares/globalErrorhandler";
-// import notFound from "./app/middlewares/notFound";
-import router from "./app/routes";
+
 import notFound from "./app/middlewares/notFound";
+import router from "./app/routes";
+import globalErrorHandler from "./app/middlewares/globalErrorhandler";
 
 const app: Application = express();
 
 //parsers
-app.use(cors());
 app.use(express.json());
-// app.use(cookieParser());
+app.use(cookieParser());
+
+app.use(cors());
 
 // application routes
 app.use("/api", router);
@@ -27,7 +28,7 @@ app.use("/api", router);
 
 // app.get('/', test);
 
-// app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 //Not Found
 app.use(notFound);
