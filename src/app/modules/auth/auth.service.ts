@@ -29,6 +29,7 @@ const loginUser = async (payload: TLoginUser) => {
   //create access token & refresh token
 
   const jwtPayload = {
+    userId: isUserExist._id,
     email: isUserExist.email,
     role: isUserExist.role,
   };
