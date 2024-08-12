@@ -6,7 +6,6 @@ import { OrderControllers } from "./orders.controller";
 
 const router = express.Router();
 
-
 router.post(
   "",
   validateRequest(OrderValidation.orderValidationSchema),
@@ -14,8 +13,7 @@ router.post(
 );
 
 
+
 router.get("", OrderControllers.getAllOrders);
-
-
 
 export const OrderRoutes = router;

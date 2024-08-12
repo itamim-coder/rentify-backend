@@ -13,5 +13,29 @@ router.post(
   validateRequest(CarValidation.createCarZodSchema),
   CarController.createCar
 );
+router.get(
+  "",
+
+  CarController.getAllCars
+);
+
+router.get(
+  "/:id",
+
+  CarController.getSingleCar
+);
+
+router.put(
+  "/:id",
+  //   validateRequest(CowValidation.updateCowZodSchema),
+  auth(USER_ROLE.admin),
+  CarController.updateCar
+);
+router.delete(
+  "/:id",
+
+  auth(USER_ROLE.admin),
+  CarController.softDeleteCar
+);
 
 export const CarRoutes = router;
