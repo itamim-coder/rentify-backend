@@ -7,7 +7,7 @@ import { TOrders } from "./orders.interface";
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
   const { ...orderData } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   const result = await OrderServices.createOrder(orderData);
 
   sendResponse<TOrders>(res, {

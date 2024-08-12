@@ -1,17 +1,20 @@
-import { Request, Response } from "express";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import catchAsync from "../../shared/catchAsync";
 import sendResponse from "../../shared/sendResponse";
+import { BookingServices } from "./booking.service";
+import { TBooking } from "./booking.interface";
 
 const createBooking = catchAsync(async (req: any, res) => {
-  //   const { ...bookingData } = req.body;
-  console.log("booking", req?.user);
-  //   const result = await OrderServices.createOrder(orderData);
+  const { userId } = req.user;
+  //   console.log("booking", req.user);
+  const { ...bookingData } = req.body;
+  const result = await BookingServices.createBooking(userId, bookingData);
 
-  //   sendResponse<TOrders>(res, {
-  //     success: true,
-  //     message: "Orders created successfully!",
-  //     data: result,
-  //   });
+  sendResponse<TBooking>(res, {
+    success: true,
+    message: "Booking created successfully!",
+    data: result,
+  });
 });
 
 // const getAllOrders = catchAsync(async (req: Request, res: Response) => {

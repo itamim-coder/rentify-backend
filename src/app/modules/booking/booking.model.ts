@@ -29,10 +29,10 @@ const bookingSchema = new Schema<TBooking>(
     },
     endTime: {
       type: String,
-
-      default: null,
       validate: {
-        validator: function (value: string) {
+        validator: function (value: string | undefined) {
+          // Allow endTime to be optional, validate if provided
+          if (value === undefined || value === null) return true;
           return /^([01]\d|2[0-3]):([0-5]\d)$/.test(value); // Validate 24hr time format
         },
         message: "Invalid endTime format. Expected format HH:mm",
@@ -44,9 +44,9 @@ const bookingSchema = new Schema<TBooking>(
     },
   },
   {
-    timestamps: true,
-  } // Adds createdAt and updatedAt timestamps
+    timestamps: true, // Adds createdAt and updatedAt timestamps
+  }
 );
 
-// Export the Mongoose model for the Car schema
+// Export the Mongoose model for the Booking schema
 export const Booking = model<TBooking>("Booking", bookingSchema);
