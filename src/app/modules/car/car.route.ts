@@ -4,6 +4,7 @@ import { CarValidation } from "./car.validation";
 import { CarController } from "./car.controller";
 import auth from "../../middlewares/auth";
 import { USER_ROLE } from "../user/user.constant";
+import { BookingControllers } from "../booking/booking.controller";
 
 const router = express.Router();
 
@@ -23,6 +24,12 @@ router.get(
   "/:id",
 
   CarController.getSingleCar
+);
+router.put(
+  "/return",
+  //   validateRequest(CowValidation.updateCowZodSchema),
+  // auth(USER_ROLE.admin),
+  BookingControllers.returnCar
 );
 
 router.put(

@@ -7,12 +7,12 @@ const bookingSchema = new Schema<TBooking>(
       type: Date,
       required: true,
     },
-    user: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    car: {
+    carId: {
       type: Schema.Types.ObjectId,
       ref: "Car",
       required: true,
@@ -29,6 +29,7 @@ const bookingSchema = new Schema<TBooking>(
     },
     endTime: {
       type: String,
+      default: null,
       validate: {
         validator: function (value: string | undefined) {
           // Allow endTime to be optional, validate if provided

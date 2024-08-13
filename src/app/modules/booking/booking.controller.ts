@@ -3,6 +3,7 @@ import catchAsync from "../../shared/catchAsync";
 import sendResponse from "../../shared/sendResponse";
 import { BookingServices } from "./booking.service";
 import { TBooking } from "./booking.interface";
+import httpStatus from "http-status";
 
 const createBooking = catchAsync(async (req: any, res) => {
   const { userId } = req.user;
@@ -11,42 +12,64 @@ const createBooking = catchAsync(async (req: any, res) => {
   const result = await BookingServices.createBooking(userId, bookingData);
 
   sendResponse<TBooking>(res, {
+    statusCode: httpStatus.OK,
     success: true,
     message: "Booking created successfully!",
     data: result,
   });
 });
 
-// const getAllOrders = catchAsync(async (req: Request, res: Response) => {
-//   const email = req.query.email;
+const getUserBookings = catchAsync(async (req: any, res) => {
+  const { userId } = req.user;
 
-//   if (email) {
-//     const result = await OrderServices.getUserOrders(email);
-//     if (result.length > 0) {
-//       sendResponse<TOrders[]>(res, {
-//         success: true,
-//         message: "Orders fetched successfully for user email!",
+  if (userId) {
+    const result = await BookingServices.getUserBookings(userId);
 
-//         data: result,
-//       });
-//     } else {
-//       sendResponse(res, {
-//         success: false,
-//         message: "Orders not found!",
-//       });
-//     }
-//   } else {
-//     const result = await OrderServices.getAllOrders();
+    if (result.length > 0) {
+      sendResponse<TBooking[]>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Booking fetched successfully for user !",
 
-//     sendResponse<TOrders[]>(res, {
-//       success: true,
-//       message: "Orders fetched successfully!",
+        data: result,
+      });
+    } else {
+      sendResponse(res, {
+        success: false,
+        message: "Orders not found!",
+      });
+    }
+  }
+});
 
-//       data: result,
-//     });
-//   }
-// });
+const returnCar = catchAsync(async (req, res) => {
+  const returnData = req.body;
+  console.log(req.body);
+  const result = await BookingServices.returnCar(returnData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Car is return succesfully",
+    data: result,
+  });
+});
+
+const getAllBookings = catchAsync(async (req, res) => {
+  const result = await BookingServices.getAllBookings(req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All Bookings are retrieved successfully",
+
+    data: result,
+  });
+});
 
 export const BookingControllers = {
   createBooking,
+  getUserBookings,
+  returnCar,
+  getAllBookings,
 };
