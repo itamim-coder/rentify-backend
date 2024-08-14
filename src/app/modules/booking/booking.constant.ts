@@ -1,1 +1,1 @@
-export const bookingFilterableFields = ["carId", "date"];
+export const bookingSearchableFields = ["car._id", "date"];

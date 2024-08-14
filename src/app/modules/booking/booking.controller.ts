@@ -14,7 +14,7 @@ const createBooking = catchAsync(async (req: any, res) => {
   sendResponse<TBooking>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Booking created successfully!",
+    message: "Car Booked successfully!",
     data: result,
   });
 });
@@ -29,14 +29,16 @@ const getUserBookings = catchAsync(async (req: any, res) => {
       sendResponse<TBooking[]>(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Booking fetched successfully for user !",
+        message: "My Bookings retrieved successfully",
 
         data: result,
       });
     } else {
       sendResponse(res, {
+        statusCode: httpStatus.NOT_FOUND,
         success: false,
-        message: "Orders not found!",
+        message: "No Data found!",
+        data: [],
       });
     }
   }
@@ -50,21 +52,29 @@ const returnCar = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Car is return succesfully",
+    message: "Car returned successfully",
     data: result,
   });
 });
 
 const getAllBookings = catchAsync(async (req, res) => {
   const result = await BookingServices.getAllBookings(req.query);
+  if (result.length > 0) {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "All Bookings are retrieved successfully",
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "All Bookings are retrieved successfully",
-
-    data: result,
-  });
+      data: result,
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "No Data found!",
+      data: [],
+    });
+  }
 });
 
 export const BookingControllers = {

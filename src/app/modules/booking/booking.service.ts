@@ -13,6 +13,7 @@ import { Booking } from "./booking.model";
 import { calculateTotalCost } from "./booking.utils";
 import QueryBuilder from "../../builder/QueryBuilder";
 
+
 const createBooking = async (
   user: Types.ObjectId,
   bookingData: any
@@ -54,7 +55,7 @@ const createBooking = async (
     await CarData.save({ session });
 
     // Create a new order entry
-    booking = new Booking({ ...bookingData, userId: userId, carId: carId });
+    booking = new Booking({ ...bookingData, user: userId, car: carId });
     await booking.save({ session });
 
     await session.commitTransaction();
@@ -66,22 +67,22 @@ const createBooking = async (
   }
 
   const populatedBooking = await Booking.findById(booking?._id)
-  .populate({
-    path: "userId",
-  })
-  .populate({
-    path: "carId",
-  });
+    .populate({
+      path: "user",
+    })
+    .populate({
+      path: "car",
+    });
   return populatedBooking;
 };
 
 const getUserBookings = async (_id: string) => {
-  const result = await Booking.find({ userId: _id })
+  const result = await Booking.find({ user: _id })
     .populate({
-      path: "userId",
+      path: "user",
     })
     .populate({
-      path: "carId",
+      path: "car",
     });
   return result;
 };
@@ -90,15 +91,15 @@ const returnCar = async (payload: any) => {
   const bookingId = payload.bookingId;
   const endTime = payload.endTime;
   const booking = await Booking.findById({ _id: bookingId })
-    .populate("userId")
-    .populate("carId");
+    .populate("user")
+    .populate("car");
 
   // Check if the cow and buyer exist
   if (!booking) {
     throw new AppError(httpStatus.NOT_FOUND, "Booking not found");
   }
   // Ensure car is populated and has the correct type
-  if (!("pricePerHour" in booking.carId)) {
+  if (!("pricePerHour" in booking.car)) {
     throw new AppError(httpStatus.NOT_FOUND, "Car not found");
   }
   // Check if the car is already unavailable
@@ -111,7 +112,7 @@ const returnCar = async (payload: any) => {
       const totalCost = calculateTotalCost(
         booking.startTime,
         payload.endTime,
-        booking.carId.pricePerHour
+        booking.car.pricePerHour
       );
       console.log(totalCost);
       booking.totalCost = totalCost;
@@ -123,7 +124,7 @@ const returnCar = async (payload: any) => {
 
     // Create a new order entry
     await Car.findByIdAndUpdate(
-      { _id: booking.carId._id },
+      { _id: booking.car._id },
       { status: "available" },
       { session }
     );
@@ -136,12 +137,16 @@ const returnCar = async (payload: any) => {
     session.endSession();
   }
 
-  return booking;
+  const updatedData = await Booking.findById({ _id: bookingId })
+    .populate("user")
+    .populate("car");
+
+  return updatedData;
 };
 
 const getAllBookings = async (query: Record<string, unknown>) => {
   const BookingQuery = new QueryBuilder(
-    Booking.find().populate("userId").populate("carId"),
+    Booking.find().populate("user").populate("car"),
     query
   ).filter();
 

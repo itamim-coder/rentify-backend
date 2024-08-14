@@ -21,13 +21,22 @@ const createCar = catchAsync(async (req, res) => {
 const getAllCars = catchAsync(async (req, res) => {
   const result = await CarServices.getAllCars();
 
-  sendResponse<TCar[]>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Cars retrieved successfully !",
+  if (result.length > 0) {
+    sendResponse<TCar[]>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Cars retrieved successfully !",
 
-    data: result,
-  });
+      data: result,
+    });
+  } else {
+    sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "No Data found!",
+      data: [],
+    });
+  }
 });
 
 const getSingleCar = catchAsync(async (req, res) => {
@@ -38,7 +47,7 @@ const getSingleCar = catchAsync(async (req, res) => {
   sendResponse<TCar>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Single Car retrieved successfully !",
+    message: "A Car retrieved successfully !",
     data: result,
   });
 });
@@ -64,7 +73,7 @@ const softDeleteCar = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Car is deleted succesfully",
+    message: "Car is deleted successfully",
     data: result,
   });
 });

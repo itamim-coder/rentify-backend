@@ -7,12 +7,12 @@ const bookingSchema = new Schema<TBooking>(
       type: Date,
       required: true,
     },
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    carId: {
+    car: {
       type: Schema.Types.ObjectId,
       ref: "Car",
       required: true,

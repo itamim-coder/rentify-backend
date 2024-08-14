@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-async-promise-executor */
 import { NextFunction, Response } from "express";
 import httpStatus from "http-status";
