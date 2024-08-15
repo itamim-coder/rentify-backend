@@ -7,13 +7,9 @@ import config from "../../config";
 
 const loginUser = async (payload: TLoginUser) => {
   const { email, password } = payload;
-  // creating instance of User
-  // const user = new User();
-  //  // access to our instance methods
-  //   const isUserExist = await user.isUserExist(id);
-  // console.log(phoneNumber)
+
   const isUserExist = await User.isUserExist(email);
-  // console.log('isuser', isUserExist)
+
 
   if (!isUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
@@ -26,7 +22,7 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(httpStatus.UNAUTHORIZED, "Password is incorrect");
   }
 
-  //create access token & refresh token
+
 
   const jwtPayload = {
     userId: isUserExist._id,

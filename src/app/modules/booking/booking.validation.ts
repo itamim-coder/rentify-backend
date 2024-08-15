@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const bookingValidationSchema = z.object({
+const createBookingValidationSchema = z.object({
   body: z.object({
     car: z.string(),
     date: z.string(),
@@ -9,5 +9,5 @@ const bookingValidationSchema = z.object({
 });
 
 export const BookingValidation = {
-  bookingValidationSchema,
+  createBookingValidationSchema,
 };
