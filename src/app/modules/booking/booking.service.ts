@@ -181,10 +181,22 @@ const changeBookingStatus = async (
   return updatedBooking;
 };
 
+const getApprovedBooking = async () => {
+  const result = await Booking.find({ bookingStatus: "Approved" })
+    .populate({
+      path: "user",
+    })
+    .populate({
+      path: "car",
+    });
+  return result;
+};
+
 export const BookingServices = {
   createBooking,
   getUserBookings,
   returnCar,
   getAllBookings,
   changeBookingStatus,
+  getApprovedBooking,
 };

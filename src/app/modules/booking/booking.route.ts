@@ -28,6 +28,11 @@ router.get(
   BookingControllers.getUserBookings
 );
 
+router.get(
+  "/get-approved-bookings",
+  auth(USER_ROLE.admin),
+  BookingControllers.getApprovedBookings
+);
 router.put(
   "/change-status/:id",
   auth(USER_ROLE.admin),
