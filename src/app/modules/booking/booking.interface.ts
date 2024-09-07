@@ -7,6 +7,7 @@ export interface TBooking {
   save(arg0: { session: import("mongodb").ClientSession }): unknown;
   _id: Types.ObjectId;
   date: Date;
+  bookingStatus: string;
   user: Types.ObjectId | TUser; // Reference to the User model
   car: Types.ObjectId | TCar; // Reference to the Car model
   startTime: string; // 24hr format time as string (e.g., "14:00")

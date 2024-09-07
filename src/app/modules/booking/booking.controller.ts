@@ -9,8 +9,8 @@ const createBooking = catchAsync(async (req: any, res) => {
   const { userId } = req.user;
   //   console.log("booking", req.user);
   const { ...bookingData } = req.body;
+  console.log(req.body);
   const result = await BookingServices.createBooking(userId, bookingData);
-
   sendResponse<TBooking>(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -77,9 +77,24 @@ const getAllBookings = catchAsync(async (req, res) => {
   }
 });
 
+const changeBookingStatus = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const bookingStatus  = req.body;
+  console.log(bookingStatus);
+  const result = await BookingServices.changeBookingStatus(id, bookingStatus);
+
+  sendResponse<TBooking>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Status updated successfully !",
+    data: result,
+  });
+});
+
 export const BookingControllers = {
   createBooking,
   getUserBookings,
   returnCar,
   getAllBookings,
+  changeBookingStatus,
 };

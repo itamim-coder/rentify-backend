@@ -16,12 +16,16 @@ const app: Application = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:5173"],
 
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 // application routes
 app.use("/api", router);
-
-
 app.use(globalErrorHandler);
 
 //Not Found

@@ -7,6 +7,10 @@ const bookingSchema = new Schema<TBooking>(
       type: Date,
       required: true,
     },
+    bookingStatus: {
+      type: String,
+      default: "Pending",
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

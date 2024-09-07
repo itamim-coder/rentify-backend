@@ -28,4 +28,10 @@ router.get(
   BookingControllers.getUserBookings
 );
 
+router.put(
+  "/change-status/:id",
+  auth(USER_ROLE.admin),
+  BookingControllers.changeBookingStatus
+);
+
 export const BookingRoutes = router;
