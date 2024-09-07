@@ -13,16 +13,15 @@ import { Booking } from "./booking.model";
 import { calculateTotalCost } from "./booking.utils";
 import QueryBuilder from "../../builder/QueryBuilder";
 
-
 const createBooking = async (
   user: Types.ObjectId,
   bookingData: any
 ): Promise<TBooking | null> => {
   const userId = user;
-  const carId = bookingData?.carId;
+  const carId = bookingData?.car;
 
   console.log(userId);
-  console.log(bookingData);
+  console.log(carId);
   if (!Types.ObjectId.isValid(userId)) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid user ID");
   }
@@ -155,9 +154,49 @@ const getAllBookings = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const changeBookingStatus = async (
+  _id: string,
+  payload: Partial<{ bookingStatus: string }>
+): Promise<TBooking | null> => {
+  // Check if the booking exists
+  const isExist = await Booking.findById(_id);
+
+  if (!isExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "Booking not found!");
+  }
+
+  // Ensure that the bookingStatus field is part of the payload
+  const { bookingStatus } = payload;
+  if (!bookingStatus) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Booking status is required!");
+  }
+
+  // Update the booking with the new bookingStatus
+  const updatedBooking = await Booking.findOneAndUpdate(
+    { _id },
+    { $set: { bookingStatus } }, // Set the new bookingStatus
+    { new: true } // Return the updated document
+  );
+
+  return updatedBooking;
+};
+
+const getApprovedBooking = async () => {
+  const result = await Booking.find({ bookingStatus: "Approved" })
+    .populate({
+      path: "user",
+    })
+    .populate({
+      path: "car",
+    });
+  return result;
+};
+
 export const BookingServices = {
   createBooking,
   getUserBookings,
   returnCar,
   getAllBookings,
+  changeBookingStatus,
+  getApprovedBooking,
 };

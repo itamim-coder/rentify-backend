@@ -12,6 +12,7 @@ export interface TUser {
   password: string;
   phone: string;
   address: string;
+  blocked: false;
 }
 
 export interface UserModel extends Model<TUser> {
