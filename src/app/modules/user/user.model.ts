@@ -33,6 +33,9 @@ const userSchema = new Schema<TUser>(
       type: String,
       required: true,
     },
+    blocked: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

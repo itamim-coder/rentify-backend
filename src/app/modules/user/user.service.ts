@@ -15,6 +15,12 @@ const createUser = async (user: TUser): Promise<TUser | null> => {
   return userWithoutPassword as unknown as TUser;
 };
 
+const getAllUsers = async () => {
+  const result = await User.find();
+  return result;
+};
+
 export const UserServices = {
   createUser,
+  getAllUsers,
 };
