@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 // Function to calculate total cost
 export function calculateTotalCost(
   startTime: string,
@@ -23,3 +25,14 @@ export function calculateTotalCost(
 
   return totalCost;
 }
+
+export function generateTransactionId() {
+  const timestamp = Date.now().toString(); // Current timestamp
+  const randomString = Math.random().toString(36).substring(2, 10); // Random alphanumeric string
+
+  const transactionId = `TXN-${timestamp}-${randomString}-${uuidv4()}`;
+  return transactionId;
+}
+
+// Example usage
+

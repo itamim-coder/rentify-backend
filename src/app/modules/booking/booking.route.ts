@@ -27,6 +27,12 @@ router.get(
   auth(USER_ROLE.user),
   BookingControllers.getUserBookings
 );
+router.get(
+  "/my-approved-bookings",
+
+  auth(USER_ROLE.user),
+  BookingControllers.getUserApprovedBookings
+);
 
 router.get(
   "/get-approved-bookings",
