@@ -43,6 +43,30 @@ const getUserBookings = catchAsync(async (req: any, res) => {
     }
   }
 });
+const getUserApprovedBookings = catchAsync(async (req: any, res) => {
+  const { userId } = req.user;
+
+  if (userId) {
+    const result = await BookingServices.getUserApprovedBookings(userId);
+
+    if (result.length > 0) {
+      sendResponse<TBooking[]>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "My Bookings retrieved successfully",
+
+        data: result,
+      });
+    } else {
+      sendResponse(res, {
+        statusCode: httpStatus.NOT_FOUND,
+        success: false,
+        message: "No Data found!",
+        data: [],
+      });
+    }
+  }
+});
 
 const returnCar = catchAsync(async (req, res) => {
   const returnData = req.body;
@@ -92,7 +116,6 @@ const changeBookingStatus = catchAsync(async (req, res) => {
 });
 
 const getApprovedBookings = catchAsync(async (req: any, res) => {
-
   const result = await BookingServices.getApprovedBooking();
 
   if (result.length > 0) {
@@ -120,4 +143,5 @@ export const BookingControllers = {
   getAllBookings,
   changeBookingStatus,
   getApprovedBookings,
+  getUserApprovedBookings,
 };

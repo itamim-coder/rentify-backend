@@ -10,7 +10,7 @@ import { Car } from "../car/car.model";
 
 import { TCar } from "../car/car.interface";
 import { Booking } from "./booking.model";
-import { calculateTotalCost } from "./booking.utils";
+import { calculateTotalCost, generateTransactionId } from "./booking.utils";
 import QueryBuilder from "../../builder/QueryBuilder";
 
 const createBooking = async (
@@ -47,14 +47,19 @@ const createBooking = async (
 
   const session = await Car.startSession();
   session.startTransaction();
+  const transactionId = generateTransactionId();
   let booking: TBooking | null = null;
   try {
     // Update the cow's label to 'sold out'
     CarData.status = "unavailable";
     await CarData.save({ session });
-
     // Create a new order entry
-    booking = new Booking({ ...bookingData, user: userId, car: carId });
+    booking = new Booking({
+      ...bookingData,
+      user: userId,
+      car: carId,
+      transactionId,
+    });
     await booking.save({ session });
 
     await session.commitTransaction();
@@ -77,6 +82,16 @@ const createBooking = async (
 
 const getUserBookings = async (_id: string) => {
   const result = await Booking.find({ user: _id })
+    .populate({
+      path: "user",
+    })
+    .populate({
+      path: "car",
+    });
+  return result;
+};
+const getUserApprovedBookings = async (_id: string) => {
+  const result = await Booking.find({ user: _id, bookingStatus: "Approved" }) // Add bookingStatus filter
     .populate({
       path: "user",
     })
@@ -199,4 +214,5 @@ export const BookingServices = {
   getAllBookings,
   changeBookingStatus,
   getApprovedBooking,
+  getUserApprovedBookings,
 };
